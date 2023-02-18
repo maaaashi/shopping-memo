@@ -1,8 +1,11 @@
 <script lang="ts">
-  import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte'
+  import { Navbar, NavBrand } from 'flowbite-svelte'
+  import { Datepicker } from 'svelte-calendar';
+  import { page } from '$app/stores';
+
 </script>
 
-<Navbar let:hidden let:toggle>
+<Navbar>
   <NavBrand href="/">
     <img
       src="https://flowbite.com/docs/images/logo.svg"
@@ -10,15 +13,11 @@
       alt="Flowbite Logo"
     />
     <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-      Flowbite
+      SHOPPING-MEMO
     </span>
   </NavBrand>
-  <NavHamburger on:click={toggle} />
-  <NavUl {hidden}>
-    <NavLi href="/" active={true}>Home</NavLi>
-    <NavLi href="/about">About</NavLi>
-    <NavLi href="/services">Services</NavLi>
-    <NavLi href="/pricing">Pricing</NavLi>
-    <NavLi href="/contact">Contact</NavLi>
-  </NavUl>
+
+  {#if $page.url.pathname !== '/auth'}
+    <Datepicker />
+  {/if}
 </Navbar>
