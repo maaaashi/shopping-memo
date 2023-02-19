@@ -2,7 +2,7 @@
   import { Navbar, NavBrand } from 'flowbite-svelte'
   import { Datepicker } from 'svelte-calendar';
   import { page } from '$app/stores';
-
+  import { storeSelectDate } from '../store';
 </script>
 
 <Navbar>
@@ -18,6 +18,6 @@
   </NavBrand>
 
   {#if $page.url.pathname !== '/auth'}
-    <Datepicker />
+    <Datepicker bind:selected={$storeSelectDate}/>
   {/if}
 </Navbar>
