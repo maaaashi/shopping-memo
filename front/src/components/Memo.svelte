@@ -1,7 +1,9 @@
 <script lang="ts">
   import FaCheckCircle from 'svelte-icons/fa/FaCheckCircle.svelte'
-	interface Memo {
-		id: string;
+  import supabase from '$lib/supabase';
+
+  interface Memo {
+    id: string;
 		user_id: string;
 		content: string;
 		checked: boolean;
@@ -14,13 +16,21 @@
     if (checked) return 'h-5 text-green-400'
     else return 'h-5 text-gray-400'
   }
+
+  const checkedHandler = async () => {
+    memo.checked = !memo.checked
+    await supabase
+      .from('memos')
+      .update({ checked: memo.checked })
+      .eq('id', memo.id)
+  }
 </script>
 
 <div class="w-4/5 mx-auto mt-5 border rounded p-3 flex justify-between">
   <div>
     {memo.content}
   </div>
-  <button on:click={() => {}} class={btnClass(memo.checked)}>
+  <button on:click={checkedHandler} class={btnClass(memo.checked)}>
     <FaCheckCircle />
   </button>
 </div>
