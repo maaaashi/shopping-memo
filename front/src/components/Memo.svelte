@@ -1,6 +1,7 @@
 <script lang="ts">
   import FaCheckCircle from 'svelte-icons/fa/FaCheckCircle.svelte'
   import supabase from '$lib/supabase';
+  import FaTrash from 'svelte-icons/fa/FaTrash.svelte'
 
   interface Memo {
     id: string;
@@ -26,24 +27,40 @@
   }
 
   const cardClass = (checked: boolean) => {
-    let classname = 'w-4/5 mx-auto mt-5 border rounded p-3 flex justify-between'
+    let classname = 'w-full border rounded p-3 flex justify-between'
     if (checked) return classname + ' bg-gray-300'
     else return classname
   }
+
+  const deleteMemo = async () => {
+    await supabase
+      .from('memos')
+      .delete()
+      .eq('id', memo.id)
+  }
 </script>
 
-<div class={cardClass(memo.checked)}>
-  <div>
-    {memo.content}
-  </div>
-  <button on:click={checkedHandler} class={btnClass(memo.checked)}>
-    <FaCheckCircle />
+<div class="w-11/12 flex mt-5 ml-5">
+  <button on:click={deleteMemo} class="text-red-300 h-5 icon mx-3 hover:text-red-600">
+    <FaTrash />
   </button>
+  <div class={cardClass(memo.checked)}>
+    <div>
+      {memo.content}
+    </div>
+    <button on:click={checkedHandler} class={btnClass(memo.checked)}>
+      <FaCheckCircle />
+    </button>
+  </div>
 </div>
 
 <style scoped>
   .checked {
     background-color: gray;
     color: white;
+  }
+
+  .icon {
+    margin-top: 15px;
   }
 </style>
