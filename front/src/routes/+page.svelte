@@ -25,6 +25,8 @@
 		})
 	}
 
+	let all_memos: Memo[] = [];
+
 	const getTodayMemo = async (selectDate: Date): Promise<Memo[]> => {
 		const year = selectDate.getFullYear()
 		const month = selectDate.getMonth() + 1
@@ -37,27 +39,59 @@
 			.select('*')
       .gt('created_at', start)
       .lt('created_at', end)
-      .order('created_at', { ascending: true })
+      .order('created_at', { ascending: false })
 
-		if (isMemo(data)) return data
+		if (isMemo(data)) {
+			all_memos = data
+			return data
+		}
 		return []
 	}
 
-	export const shopping_memos = derived(
+	const shopping_memos = derived(
 		storeSelectDate,
-		async ($storeSelectDate) => getTodayMemo($storeSelectDate)
-	);
+		async ($storeSelectDate) => await getTodayMemo($storeSelectDate)
+	)
+	$shopping_memos
 
+	const MemoChannel = supabase.channel('memos')
+
+	MemoChannel
+		.on (
+			'postgres_changes',
+			{ event: 'INSERT', schema: 'public', table: 'memos' },
+			(payload) => {
+				const payload_new = payload.new as Memo
+				all_memos = [payload_new, ...all_memos]
+			}
+		)
+		.on (
+			'postgres_changes',
+			{ event: 'UPDATE', schema: 'public', table: 'memos' },
+			async (payload) => {
+				const targetIndex = all_memos.findIndex(memo => memo.id === payload.old.id)
+				const payload_new = payload.new as Memo
+				if (targetIndex) {
+					all_memos[targetIndex] = payload_new
+				}
+			}
+		)
+		.on (
+			'postgres_changes',
+			{ event: 'DELETE', schema: 'public', table: 'memos' },
+			(payload) => {
+				const targetIndex = all_memos.findIndex(memo => memo.id === payload.old.id)
+				all_memos.splice(targetIndex, 1)
+				all_memos = all_memos
+			}
+		)
+		.subscribe()
 </script>
 
 <svelte:head>
 	<title>SHOPPING MEMO</title>
 </svelte:head>
 
-{#await $shopping_memos}
-	...
-{:then memos}
-	{#each memos as memo}
-		<Memo memo={memo}/>
-	{/each}
-{/await}
+{#each all_memos as memo}
+	<Memo memo={memo}/>
+{/each}

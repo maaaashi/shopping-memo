@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Button } from "flowbite-svelte";
   import FaCheckCircle from 'svelte-icons/fa/FaCheckCircle.svelte'
 	interface Memo {
 		id: string;
@@ -21,7 +20,7 @@
   <div>
     {memo.content}
   </div>
-  <button class={btnClass(memo.checked)}>
+  <button on:click={() => {}} class={btnClass(memo.checked)}>
     <FaCheckCircle />
   </button>
 </div>
