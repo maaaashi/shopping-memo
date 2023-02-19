@@ -28,8 +28,8 @@
 
 <footer class="p-5">
   <form on:submit|preventDefault={insertMemo} class="flex">
-    <Input bind:value={new_memo}/>
-    <Button type="submit" color="green">登録</Button>
+    <Input required bind:value={new_memo}/>
+    <Button type="submit" color="blue">＋</Button>
   </form>
 </footer>
 
