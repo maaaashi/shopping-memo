@@ -3,6 +3,7 @@
 	import supabase from "$lib/supabase";
 	import { derived } from "svelte/store";
 	import Memo from "../components/Memo.svelte";
+  import AddBox from "../components/AddBox.svelte";
 
 	interface Memo {
 		id: string;
@@ -92,6 +93,19 @@
 	<title>SHOPPING MEMO</title>
 </svelte:head>
 
-{#each all_memos as memo}
-	<Memo memo={memo}/>
-{/each}
+<main>
+	{#each all_memos as memo}
+		<Memo memo={memo}/>
+	{/each}
+</main>
+
+<div class="absolute bottom-0">
+	<AddBox bind:memos={all_memos}/>
+</div>
+
+<style scoped>
+	main {
+		height: calc(100vh - 180px);
+		overflow-y: auto;
+	}
+</style>

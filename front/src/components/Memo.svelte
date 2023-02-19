@@ -24,9 +24,15 @@
       .update({ checked: memo.checked })
       .eq('id', memo.id)
   }
+
+  const cardClass = (checked: boolean) => {
+    let classname = 'w-4/5 mx-auto mt-5 border rounded p-3 flex justify-between'
+    if (checked) return classname + ' bg-gray-300'
+    else return classname
+  }
 </script>
 
-<div class="w-4/5 mx-auto mt-5 border rounded p-3 flex justify-between">
+<div class={cardClass(memo.checked)}>
   <div>
     {memo.content}
   </div>
@@ -34,3 +40,10 @@
     <FaCheckCircle />
   </button>
 </div>
+
+<style scoped>
+  .checked {
+    background-color: gray;
+    color: white;
+  }
+</style>

@@ -5,6 +5,7 @@
 	import { onMount } from "svelte";
 	import supabase from "$lib/supabase";
   import { invalidate } from "$app/navigation";
+  import Footer from "../components/AddBox.svelte";
 
 	export let data;
 	onMount(() => {
