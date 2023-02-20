@@ -4,7 +4,6 @@
 	import { derived } from "svelte/store";
 	import Memo from "../components/Memo.svelte";
   import AddBox from "../components/AddBox.svelte";
-  import { Button } from "flowbite-svelte";
 
 	interface Memo {
 		id: string;
@@ -13,8 +12,6 @@
 		checked: boolean;
 		created_at: string;
 	}
-
-	export let data;
 
 	const isMemo = (targets: unknown[] | null): targets is Memo[] => {
 		if (targets === null) return false
@@ -96,23 +93,15 @@
 	<title>SHOPPING MEMO</title>
 </svelte:head>
 
-{#if data?.user}
-	<main>
-		{#each all_memos as memo}
-			<Memo memo={memo}/>
-		{/each}
-	</main>
+<main>
+	{#each all_memos as memo}
+		<Memo memo={memo}/>
+	{/each}
+</main>
 
-	<div class="absolute bottom-0">
-		<AddBox bind:memos={all_memos}/>
-	</div>
-{:else}
-	<div class="h-fit w-4/5 sm:w-3/5 lg:w-2/5 mx-auto mt-10 p-5 border bg-gray-100 rounded-lg text-center">
-		<p class="mb-5">サインインしてご利用ください。</p>
-		<Button href="/auth">GO SignIn</Button>
-	</div>
-{/if}
-
+<div class="absolute bottom-0">
+	<AddBox bind:memos={all_memos}/>
+</div>
 
 <style scoped>
 	main {
