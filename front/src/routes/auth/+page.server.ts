@@ -1,4 +1,4 @@
-import { getSupabase, getServerSession } from '@supabase/auth-helpers-sveltekit';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -8,7 +8,7 @@ export const actions = {
     const email = formData.get('email');
     const password = formData.get('password');
 
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
+    const { error } = await supabaseClient.auth.signInWithPassword({
       email,
       password
     })

@@ -31,7 +31,7 @@
       error_message = ''
     }, 2000)
 
-    if (form.status === 200) {
+    if (form?.status === 200) {
       goto('/')
     }
   })

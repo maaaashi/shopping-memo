@@ -7,19 +7,13 @@ export async function load(event) {
   const { session } = await getSupabase(event)
   const pathname = event.url.pathname
 
-  // if (session) {
-  //   if (pathname === '/auth') throw redirect(304, '/')
-    return session
-  // }
+  if (session && pathname === '/auth') {
+    throw redirect(304, '/')
+  }
 
-  // if (pathname === '/') throw redirect(304, '/auth')
-  // return session
-  // if (!session && pathname === '/') {
-  //   throw redirect(304, '/auth')
-  // }
+  if (!session && pathname === '/') {
+    throw redirect(304, '/auth')
+  }
 
-  // if (session && pathname === '/auth') {
-  //   throw redirect(304, '/')
-  // }
-
+  return session
 }
