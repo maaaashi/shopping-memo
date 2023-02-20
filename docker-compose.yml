@@ -9,7 +9,8 @@ services:
       dockerfile: ~/dev/.dockers/node/
     ports:
       - "8080:8080"
+      - "4173:4173"
     volumes:
       - "./front:/var/www/app"
     tty: true
-    command: pnpm run dev
+    command: pnpm run preview
