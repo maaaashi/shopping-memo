@@ -7,6 +7,7 @@
   import { Button, Heading } from "flowbite-svelte";
 	import type { Memo as MemoType } from "../types/memo";
 	import { sessionStore } from "../store/session";
+	import { Datepicker } from 'svelte-calendar';
 
 	const isMemo = (targets: unknown[] | null): targets is MemoType[] => {
 		if (targets === null) return false
@@ -90,10 +91,21 @@
 
 {#if $sessionStore}
 	<main>
-		<div class="text-center">
-			<Heading tag="h3">
-				{$storeSelectDate.toLocaleDateString()} 買い物リスト
-			</Heading>
+		<div class="justify-center flex mt-5">
+			<Datepicker bind:selected={$storeSelectDate} let:key let:send let:receive>
+				<button class="border rounded-lg" in:receive|local={{ key }} out:send|local={{ key }}>
+					<Button color="light">
+						<Heading tag="h3" >
+							{$storeSelectDate.toLocaleDateString()}
+						</Heading>
+					</Button>
+				</button>
+			</Datepicker>
+			<div class="p-3">
+				<Heading tag="h3">
+					買い物リスト
+				</Heading>
+			</div>
 		</div>
 		{#each all_memos as memo}
 			<Memo memo={memo}/>
@@ -115,7 +127,7 @@
 
 <style scoped>
 	main {
-		height: calc(100vh - 180px);
+		height: calc(100vh - 130px);
 		overflow-y: auto;
 	}
 </style>
