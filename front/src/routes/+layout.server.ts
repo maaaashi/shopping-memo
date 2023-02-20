@@ -8,11 +8,11 @@ export async function load(event) {
   const pathname = event.url.pathname
 
   if (!session && pathname !== '/auth') {
-    throw redirect(304, '/auth')
+    throw redirect(307, '/auth')
   }
 
   if (session && pathname !== '/') {
-    throw redirect(304, '/')
+    throw redirect(307, '/')
   }
 
   return session
