@@ -2,7 +2,7 @@
   import FaCheckCircle from 'svelte-icons/fa/FaCheckCircle.svelte'
   import supabase from '$lib/supabase';
   import FaTrash from 'svelte-icons/fa/FaTrash.svelte'
-  import type { Memo } from '../types/memo';
+  import type { Memo } from '$types/memo';
 
   export let memo: Memo;
 

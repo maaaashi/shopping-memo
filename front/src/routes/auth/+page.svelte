@@ -2,8 +2,8 @@
   import { Alert } from "flowbite-svelte";
   import { fade } from "svelte/transition";
   import { page } from "$app/stores";
-  import SignIn from "../../components/SignIn.svelte";
-  import SignUp from "../../components/SignUp.svelte";
+  import SignIn from "$components/SignIn.svelte";
+  import SignUp from "$components/SignUp.svelte";
 
   let message = ''
   let error_message = ''

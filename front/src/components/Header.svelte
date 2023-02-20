@@ -2,7 +2,7 @@
   import { Button, Navbar, NavBrand, NavHamburger, NavLi, NavUl } from 'flowbite-svelte'
   import rep from '$lib/images/rep.jpeg'
   import supabase from '$lib/supabase';
-  import { sessionStore } from '../store/session';
+  import { sessionStore } from '$store/session';
 
   const logout = async () => {
     await supabase.auth.signOut()

@@ -1,7 +1,7 @@
 <script lang="ts">
   import supabase from "$lib/supabase";
   import { Button, Input } from "flowbite-svelte";
-  import type { Memo } from "../types/memo";
+  import type { Memo } from "$types/memo";
   export let memos: Memo[];
 
   let new_memo = '';

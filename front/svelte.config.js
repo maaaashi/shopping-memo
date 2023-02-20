@@ -16,6 +16,11 @@ const config = {
 
   kit: {
     adapter: adapter(),
+    alias: {
+      '$components': 'src/components',
+      '$types': 'src/types',
+      '$store': 'src/store',
+    }
   },
 };
 

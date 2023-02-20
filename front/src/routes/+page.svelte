@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { storeSelectDate } from "../store/date";
+	import { storeSelectDate } from "$store/date";
 	import supabase from "$lib/supabase";
 	import { derived } from "svelte/store";
-	import Memo from "../components/Memo.svelte";
-  import AddBox from "../components/AddBox.svelte";
+	import Memo from "$components/Memo.svelte";
+  import AddBox from "$components/AddBox.svelte";
   import { Button, Heading } from "flowbite-svelte";
-	import type { Memo as MemoType } from "../types/memo";
-	import { sessionStore } from "../store/session";
+	import type { Memo as MemoType } from "$types/memo";
+	import { sessionStore } from "$store/session";
 	import { Datepicker } from 'svelte-calendar';
 
 	const isMemo = (targets: unknown[] | null): targets is MemoType[] => {

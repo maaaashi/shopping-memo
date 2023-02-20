@@ -1,10 +1,10 @@
 <script>
 	import "../app.postcss";
 	import './styles.css';
-	import Header from '../components/Header.svelte';
+	import Header from '$components/Header.svelte';
 	import supabase from "$lib/supabase";
 	import { onMount } from "svelte";
-	import { sessionStore } from "../store/session";
+	import { sessionStore } from "$store/session";
 
 	const getSession = async () => {
 		const { data } = await supabase.auth.getSession()
