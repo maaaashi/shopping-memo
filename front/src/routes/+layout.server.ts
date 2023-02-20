@@ -7,6 +7,7 @@ export async function load(event) {
   const { session } = await getSupabase(event)
   const pathname = event.url.pathname
 
+  console.log(Boolean(session) + ' : ' +  pathname)
   if (!session && pathname !== '/auth') {
     throw redirect(307, '/auth')
   }
