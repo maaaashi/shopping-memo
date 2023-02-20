@@ -4,6 +4,7 @@
   import FaRegEye from 'svelte-icons/fa/FaRegEye.svelte'
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
+  import { goto } from "$app/navigation";
 
   export let form: { status: number};
 
@@ -29,6 +30,10 @@
     setTimeout(() => {
       error_message = ''
     }, 2000)
+
+    if (form.status === 200) {
+      goto('/')
+    }
   })
 </script>
 

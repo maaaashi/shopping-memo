@@ -13,4 +13,4 @@ services:
     volumes:
       - "./front:/var/www/app"
     tty: true
-    command: pnpm run preview
+    command: pnpm run dev

@@ -26,7 +26,6 @@
 		<Header />
 	</header>
 
-	<!-- {@debug data} -->
 	<main>
 		<slot></slot>
 	</main>
