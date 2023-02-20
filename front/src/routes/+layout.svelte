@@ -2,23 +2,20 @@
 	import "../app.postcss";
 	import './styles.css';
 	import Header from '../components/Header.svelte';
-	import { onMount } from "svelte";
 	import supabase from "$lib/supabase";
-  import { invalidate } from "$app/navigation";
-  import { Button } from "flowbite-svelte";
+	import { onMount } from "svelte";
+	import { sessionStore } from "../store/session";
 
-	export let data;
-	onMount(() => {
-    const {
-      data: { subscription }
-    } = supabase.auth.onAuthStateChange(() => {
-      invalidate('supabase:auth');
-    });
+	const getSession = async () => {
+		const { data } = await supabase.auth.getSession()
+		sessionStore.set(data.session)
+	}
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  });
+  onMount(() => {
+		supabase.auth.onAuthStateChange((_event, _session) => {
+			sessionStore.set(_session)
+    })
+  })
 </script>
 
 <div class="app">
@@ -26,7 +23,12 @@
 		<Header />
 	</header>
 
-	<main>
-		<slot data={data}></slot>
-	</main>
+	{#await getSession()}
+		ログイン情報取得中...
+	{:then session}
+		<main>
+			<slot></slot>
+		</main>
+	{/await}
+
 </div>

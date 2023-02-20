@@ -1,37 +1,29 @@
 <script lang="ts">
-	import { storeSelectDate } from "../store";
+	import { storeSelectDate } from "../store/date";
 	import supabase from "$lib/supabase";
 	import { derived } from "svelte/store";
 	import Memo from "../components/Memo.svelte";
   import AddBox from "../components/AddBox.svelte";
-  import { Button } from "flowbite-svelte";
+  import { Button, Heading } from "flowbite-svelte";
+	import type { Memo as MemoType } from "../types/memo";
+	import { sessionStore } from "../store/session";
 
-	interface Memo {
-		id: string;
-		user_id: string;
-		content: string;
-		checked: boolean;
-		created_at: string;
-	}
-
-	export let data;
-
-	const isMemo = (targets: unknown[] | null): targets is Memo[] => {
+	const isMemo = (targets: unknown[] | null): targets is MemoType[] => {
 		if (targets === null) return false
 		return targets.every(target => {
 			return typeof target === "object" &&
 			target !== null &&
-			typeof (target as Memo).id === "string" &&
-			typeof (target as Memo).user_id === "string" &&
-			typeof (target as Memo).content === "string" &&
-			typeof (target as Memo).checked === "boolean" &&
-			typeof (target as Memo).created_at === "string";
+			typeof (target as MemoType).id === "string" &&
+			typeof (target as MemoType).user_id === "string" &&
+			typeof (target as MemoType).content === "string" &&
+			typeof (target as MemoType).checked === "boolean" &&
+			typeof (target as MemoType).created_at === "string";
 		})
 	}
 
-	let all_memos: Memo[] = [];
+	let all_memos: MemoType[] = [];
 
-	const getTodayMemo = async (selectDate: Date): Promise<Memo[]> => {
+	const getTodayMemo = async (selectDate: Date): Promise<MemoType[]> => {
 		const year = selectDate.getFullYear()
 		const month = selectDate.getMonth() + 1
 		const date = selectDate.getDate()
@@ -65,7 +57,7 @@
 			'postgres_changes',
 			{ event: 'INSERT', schema: 'public', table: 'memos' },
 			(payload) => {
-				const payload_new = payload.new as Memo
+				const payload_new = payload.new as MemoType
 				all_memos = [payload_new, ...all_memos]
 			}
 		)
@@ -74,7 +66,7 @@
 			{ event: 'UPDATE', schema: 'public', table: 'memos' },
 			async (payload) => {
 				const targetIndex = all_memos.findIndex(memo => memo.id === payload.old.id)
-				const payload_new = payload.new as Memo
+				const payload_new = payload.new as MemoType
 				if (targetIndex) {
 					all_memos[targetIndex] = payload_new
 				}
@@ -96,10 +88,17 @@
 	<title>SHOPPING MEMO</title>
 </svelte:head>
 
-{#if data?.user}
+{#if $sessionStore}
 	<main>
+		<div class="text-center">
+			<Heading tag="h3">
+				{$storeSelectDate.toLocaleDateString()} 買い物リスト
+			</Heading>
+		</div>
 		{#each all_memos as memo}
 			<Memo memo={memo}/>
+		{:else}
+			買うものないなあ
 		{/each}
 	</main>
 

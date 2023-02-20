@@ -2,18 +2,9 @@
   import { Heading, Input, Label, Alert } from "flowbite-svelte";
   import FaRegEyeSlash from 'svelte-icons/fa/FaRegEyeSlash.svelte'
   import FaRegEye from 'svelte-icons/fa/FaRegEye.svelte'
-  import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { goto } from "$app/navigation";
-
-  export let form: { status: number};
-
-  const initError = (status: number): string => {
-    if (status === 400) return '認証情報が違います。'
-    return ''
-  }
-
-  $: error_message = initError(form?.status)
+  import supabase from "$lib/supabase";
 
   let email = ''
   let password = ''
@@ -26,15 +17,22 @@
     else passwordFormType = 'password'
   }
 
-  onMount(() => {
-    setTimeout(() => {
-      error_message = ''
-    }, 2000)
+  let error_message = ''
 
-    if (form?.status === 200) {
+  const signin = async () => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email, password
+    })
+
+    if (error) {
+      error_message = error.message
+      setTimeout(() => {
+        error_message = ''
+      }, 2000);
+    } else {
       goto('/')
     }
-  })
+  }
 </script>
 
 {#if error_message}
@@ -47,7 +45,7 @@
 {/if}
 
 <div class="h-full w-4/5 sm:w-3/5 lg:w-2/5 mx-auto mt-10 p-5 border bg-gray-100 rounded-lg">
-  <form method="post" action="?/login" >
+  <form on:submit|preventDefault={signin} >
     <div class="text-center">
       <Heading tag="h3">SignIn</Heading>
     </div>

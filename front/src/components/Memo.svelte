@@ -2,14 +2,7 @@
   import FaCheckCircle from 'svelte-icons/fa/FaCheckCircle.svelte'
   import supabase from '$lib/supabase';
   import FaTrash from 'svelte-icons/fa/FaTrash.svelte'
-
-  interface Memo {
-    id: string;
-		user_id: string;
-		content: string;
-		checked: boolean;
-		created_at: string;
-	}
+  import type { Memo } from '../types/memo';
 
   export let memo: Memo;
 
