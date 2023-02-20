@@ -4,7 +4,7 @@
 	import { derived } from "svelte/store";
 	import Memo from "$components/Memo.svelte";
   import AddBox from "$components/AddBox.svelte";
-  import { Button, Heading } from "flowbite-svelte";
+  import { Button, Heading, P } from "flowbite-svelte";
 	import type { Memo as MemoType } from "$types/memo";
 	import { sessionStore } from "$store/session";
 	import { Datepicker } from 'svelte-calendar';
@@ -23,8 +23,10 @@
 	}
 
 	let all_memos: MemoType[] = [];
+	let loading = false
 
 	const getTodayMemo = async (selectDate: Date): Promise<MemoType[]> => {
+		loading = true
 		const year = selectDate.getFullYear()
 		const month = selectDate.getMonth() + 1
 		const date = selectDate.getDate()
@@ -40,8 +42,11 @@
 
 		if (isMemo(data)) {
 			all_memos = data
+			loading = false
 			return data
 		}
+
+		loading = false
 		return []
 	}
 
@@ -52,37 +57,32 @@
 	$shopping_memos
 
 	const MemoChannel = supabase.channel('memos')
-
-	MemoChannel
 		.on (
 			'postgres_changes',
-			{ event: 'INSERT', schema: 'public', table: 'memos' },
+			{ event: '*', schema: 'public', table: 'memos' },
 			(payload) => {
-				const payload_new = payload.new as MemoType
-				all_memos = [payload_new, ...all_memos]
-			}
-		)
-		.on (
-			'postgres_changes',
-			{ event: 'UPDATE', schema: 'public', table: 'memos' },
-			async (payload) => {
-				const targetIndex = all_memos.findIndex(memo => memo.id === payload.old.id)
-				const payload_new = payload.new as MemoType
-				if (targetIndex) {
-					all_memos[targetIndex] = payload_new
+				switch(payload.eventType) {
+					case 'INSERT':
+						const insertMemo = payload.new as MemoType
+						all_memos = [insertMemo, ...all_memos]
+						break;
+					case 'UPDATE':
+						const updateIndex = all_memos.findIndex(memo => memo.id === payload.old.id)
+						const updateMemo = payload.new as MemoType
+						if (updateIndex) {
+							all_memos[updateIndex] = updateMemo
+						}
+						break;
+					case 'DELETE':
+						const deleteIndex = all_memos.findIndex(memo => memo.id === payload.old.id)
+						all_memos.splice(deleteIndex, 1)
+						all_memos = all_memos
+						break;
 				}
 			}
 		)
-		.on (
-			'postgres_changes',
-			{ event: 'DELETE', schema: 'public', table: 'memos' },
-			(payload) => {
-				const targetIndex = all_memos.findIndex(memo => memo.id === payload.old.id)
-				all_memos.splice(targetIndex, 1)
-				all_memos = all_memos
-			}
-		)
-		.subscribe()
+
+	MemoChannel.subscribe()
 </script>
 
 <svelte:head>
@@ -107,11 +107,15 @@
 				</Heading>
 			</div>
 		</div>
-		{#each all_memos as memo}
-			<Memo memo={memo}/>
+		{#if loading}
+			読み込み中...
 		{:else}
-			買うものないなあ
-		{/each}
+			{#each all_memos as memo}
+				<Memo memo={memo}/>
+			{:else}
+				買うものないなあ
+			{/each}
+		{/if}
 	</main>
 
 	<div class="absolute bottom-0">

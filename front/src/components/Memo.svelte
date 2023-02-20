@@ -7,7 +7,7 @@
   export let memo: Memo;
 
   const btnClass = (checked: boolean): string => {
-    if (checked) return 'h-5 text-green-400'
+    if (checked) return 'h-5 text-blue-400'
     else return 'h-5 text-gray-400'
   }
 
@@ -20,9 +20,9 @@
   }
 
   const cardClass = (checked: boolean) => {
-    let classname = 'w-full border rounded p-3 flex justify-between'
+    let classname = 'w-full border-2 rounded p-3 flex justify-between'
     if (checked) return classname + ' bg-gray-300'
-    else return classname
+    else return classname + ' bg-white'
   }
 
   const deleteMemo = async () => {
