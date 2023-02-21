@@ -7,8 +7,8 @@
   export let memo: Memo;
 
   const btnClass = (checked: boolean): string => {
-    if (checked) return 'h-5 text-blue-400'
-    else return 'h-5 text-gray-400'
+    if (checked) return 'w-30 h-5 text-blue-400'
+    else return 'w-30 h-5 text-gray-400'
   }
 
   const checkedHandler = async () => {
@@ -34,7 +34,7 @@
 </script>
 
 <div class="w-11/12 flex mt-5 ml-5">
-  <button on:click={deleteMemo} class="text-red-300 h-5 icon mx-3 hover:text-red-600">
+  <button on:click={deleteMemo} class="w-30 text-red-300 h-5 icon mx-3 hover:text-red-600">
     <FaTrash />
   </button>
   <div class={cardClass(memo.checked)}>

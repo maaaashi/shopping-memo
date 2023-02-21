@@ -23,7 +23,12 @@
     <NavHamburger on:click={toggle} />
     <NavUl {hidden}>
       <NavLi>
-        <Button color="light" on:click={logout}>ログアウト</Button>
+        <div class="md:hidden block">
+          <button class="w-full" on:click={logout}>ログアウト</button>
+        </div>
+        <div class="md:block hidden">
+          <Button color="light" on:click={logout}>ログアウト</Button>
+        </div>
       </NavLi>
     </NavUl>
   {/if}

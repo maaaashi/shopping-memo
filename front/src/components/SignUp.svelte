@@ -78,7 +78,7 @@
     type={passwordFormType}
     required
   >
-    <button type="button" class="h-1/2" slot="right" on:click={clickHandler}>
+    <button type="button" class="h-1/2 w-30" slot="right" on:click={clickHandler}>
       {#if viewPassword}
         <FaRegEye />
         {:else}
@@ -95,7 +95,7 @@
     type={confirmPasswordFormType}
     required
   >
-    <button type="button" class="h-1/2" slot="right" on:click={clickConfirmHandler}>
+    <button type="button" class="h-1/2 w-30" slot="right" on:click={clickConfirmHandler}>
       {#if viewConfirmPassword}
         <FaRegEye />
         {:else}
